@@ -31,8 +31,6 @@
 <script src="lib/ship.js"></script>
 <script src="lib/asteroid.js"></script>
 <script src="lib/shooter.js"></script>
-<script src="lib/particle.js"></script>
-<script src="lib/blackHole.js"></script>
 
 <script src="lib/game.js"></script>
 <script src="lib/gameView.js"></script>
@@ -45,9 +43,20 @@
   var ctx = canvas.getContext('2d');
   ctx.font = '30pt Calibri'
   var game = new Asteroids.Game();
-  canvas.addEventListener("mousedown", function () {
-    var x = event.pageX;
-    var y = event.pageY;
+
+  var getMousePos = function (canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: (evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width,
+      y: (evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height
+    };
+  };
+
+  canvas.addEventListener("mousedown", function (event) {
+    var mousePos = getMousePos(canvas, event);
+    console.log(mousePos);
+    var x = mousePos.x;
+    var y = mousePos.y;
     game.ship.fireBullet(x,y);
   }, false)
   var gameView = new Asteroids.GameView(game,ctx);
